@@ -11,10 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/callback")
 public class CallbackServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public CallbackServlet() {
-        super();
-    }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String msg = "Bhanu received this code from Cigna: " + request.getQueryString();
