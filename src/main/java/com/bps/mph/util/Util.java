@@ -12,6 +12,8 @@ public class Util {
 	public static final String CLIENT_ID = "7aa3a815-0100-48bb-8c17-e991925ac621";
 	public static final String CLIENT_SECRET = "e0e0e5d7-27e9-490b-ba8e-c425c127a5bb";
 	public static final String REDIRECT_URL = "http://mphauthflow-env.eba-pwfbf2qx.ap-south-1.elasticbeanstalk.com/callback";
+	public static final String CONSUMER_SANDBOX_ENDPOINT = "https://p-hi2.digitaledge.cigna.com/ConsumerAccess/v1-devportal";
+	public static final String PROVIDER_SANDBOX_ENDPOINT = "https://p-hi2.digitaledge.cigna.com/ProviderDirectory/v1-devportal";
 
 	public static boolean isSuccess(int statusCode) {
 		if (statusCode >= 200 && statusCode <= 299) {

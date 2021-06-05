@@ -46,4 +46,13 @@ public class TokenRequest {
 	public void setClient_secret(String client_secret) {
 		this.client_secret = client_secret;
 	}
+
+	@Override
+	public String toString() {
+		return (grant_type != null ? "grant_type=" + grant_type + "&" : "")
+				+ (code != null ? "code=" + code + "&" : "")
+				+ (redirect_uri != null ? "redirect_uri=" + redirect_uri + "&" : "")
+				+ (client_id != null ? "client_id=" + client_id + "&" : "")
+				+ (client_secret != null ? "client_secret=" + client_secret : "");
+	}
 }

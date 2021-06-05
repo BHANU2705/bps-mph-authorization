@@ -18,17 +18,26 @@ public class TokenUtility {
 	public TokenResponse fetchAccessToken(String authorizationCode) {
 		TokenResponse tokenResponse = null;
 		try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-			String url = Util.encodeUrl(Util.SANDBOX_TOKEN_URL);
+			String url = Util.SANDBOX_TOKEN_URL + "?client_id=" + Util.CLIENT_ID;
+			System.out.println("Bhanu Token URL: " + url);
 			String payload = getPayload(authorizationCode);
+			System.out.println("Bhanu Token Payload: " + payload);
 			HttpPost httpPost = new HttpPost(url);
 			StringEntity entity = new StringEntity(payload, Charset.forName("UTF-8"));
 			httpPost.setEntity(entity);
-			httpPost.setHeader("Content-Type", "application/json");
+			httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
 			try (CloseableHttpResponse httpResponse = client.execute(httpPost)) {
 				if (Util.isSuccess(httpResponse.getStatusLine().getStatusCode())) {
 					String str = EntityUtils.toString(httpResponse.getEntity());
+					System.out.println("Bhanu token response: " + str);
 					Gson gson = new Gson();
 					tokenResponse = gson.fromJson(str, TokenResponse.class);
+					System.out.println("Bhanu token response accessToken: " + tokenResponse.getAccess_token());
+				} else {
+					String str = EntityUtils.toString(httpResponse.getEntity());
+					System.out.println("Bhanu token fetch failed: " +httpResponse.getStatusLine().getStatusCode() 
+							+ " " + httpResponse.getStatusLine().getReasonPhrase()
+							+ " > " + str);
 				}
 			}
 		} catch (IOException e) {
@@ -47,8 +56,9 @@ public class TokenUtility {
 		tokenRequest.setClient_id(clientId);
 		tokenRequest.setClient_secret(secret);
 
-		Gson gson = new Gson();
-		String payload = gson.toJson(tokenRequest);
-		return payload;
+		/*
+		 * Gson gson = new Gson(); String payload = gson.toJson(tokenRequest);
+		 */
+		return tokenRequest.toString();
 	}
 }

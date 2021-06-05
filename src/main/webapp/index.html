@@ -6,10 +6,34 @@
 </head>
 <body>
 	<div style="border: 1px solid black">
-		User Authorization Flow<br>
+		<h2>User Authorization Flow Hello</h2>
+		<hr>
 		<form action="/authorize" method="get">
 			<button type="submit" autofocus>Authorize</button>
 		</form>
 	</div>
+	<hr>
+	<hr>
+	<br>
+	<br>
+	<br>
+	<div style="border: 1px solid black">
+		<h2>Data Fetch</h2>
+		<h3>Consumer || Provider</h3>
+		<hr>
+		<form action="/data" method="get" onsubmit="return submitAction()">
+			<input type="radio" id="consumer" name="type" value="consumer">
+			<label for="consumer">Consumer (Patient)</label><br> <input
+				type="radio" id="provider" name="type" value="provider"> <label
+				for="provider">Provider</label><br> <label for="authCode">Authorization
+				Code: </label><br> <input type="text" id="authCode" name="authCode">
+			<button type="submit" autofocus>Fetch</button>
+		</form>
+	</div>
+	<script>
+		function submitAction(data) {
+			alert("hello: " + data);
+		}
+	</script>
 </body>
 </html>

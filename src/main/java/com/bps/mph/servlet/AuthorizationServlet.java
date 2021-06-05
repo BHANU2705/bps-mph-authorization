@@ -27,21 +27,8 @@ public class AuthorizationServlet extends HttpServlet {
 
 		String queryParamsFormat = "?nonce={0}&response_type=code&state={1}&client_id={2}&scope=patient/*.read%20openid%20fhirUser&redirect_uri={3}";
 		String queryParam = MessageFormat.format(queryParamsFormat, nonce, state, clientId, redirectUrl);
-//		String finalUrl = Util.encodeUrl(url + queryParam);
 		String finalUrl = url + queryParam;
 		System.out.println("Authorize URL: " + finalUrl);
 		response.sendRedirect(finalUrl);  
-		/*
-		 * if (Util.isValidURL(finalUrl)) { HttpGet httpGet = new HttpGet(finalUrl); try
-		 * (CloseableHttpClient client = HttpClientBuilder.create().build()) { try
-		 * (CloseableHttpResponse httpResponse = client.execute(httpGet)) { if
-		 * (Util.isSuccess(httpResponse.getStatusLine().getStatusCode())) {
-		 * response.getWriter().append("Auth request sent successfully");
-		 * response.setStatus(HttpStatus.SC_OK); } else {
-		 * response.sendError(httpResponse.getStatusLine().getStatusCode(),
-		 * httpResponse.getStatusLine().getReasonPhrase()); } } } } else {
-		 * response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR,
-		 * "Bhanu - Invalid authorization url"); }
-		 */
 	}
 }
