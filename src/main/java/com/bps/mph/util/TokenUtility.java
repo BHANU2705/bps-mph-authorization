@@ -1,7 +1,10 @@
 package com.bps.mph.util;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -15,7 +18,7 @@ import com.bps.mph.api.TokenResponse;
 import com.google.gson.Gson;
 
 public class TokenUtility {
-	public TokenResponse fetchAccessToken(String authorizationCode) {
+	public TokenResponse fetchAccessToken(String authorizationCode, HttpServletResponse response) {
 		TokenResponse tokenResponse = null;
 		try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
 			String url = Util.SANDBOX_TOKEN_URL + "?client_id=" + Util.CLIENT_ID;
@@ -38,6 +41,13 @@ public class TokenUtility {
 					System.out.println("Bhanu token fetch failed: " +httpResponse.getStatusLine().getStatusCode() 
 							+ " " + httpResponse.getStatusLine().getReasonPhrase()
 							+ " > " + str);
+					
+					response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
+					response.setStatus(httpResponse.getStatusLine().getStatusCode());
+					PrintWriter out = response.getWriter();
+					out.print(str);
+					out.flush();
 				}
 			}
 		} catch (IOException e) {

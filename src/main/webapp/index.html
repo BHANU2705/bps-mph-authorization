@@ -3,36 +3,64 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Bhanu | MPH</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<div style="border: 1px solid black">
-		<h2>User Authorization Flow Hello</h2>
+		<h2>User Authorization Flow</h2>
+		<h4>Generates Authorization code</h4>
 		<hr>
 		<form action="/authorize" method="get">
 			<button type="submit" autofocus>Authorize</button>
 		</form>
+		<br><br>
 	</div>
-	<hr>
 	<hr>
 	<br>
 	<br>
 	<br>
 	<div style="border: 1px solid black">
 		<h2>Data Fetch</h2>
-		<h3>Consumer || Provider</h3>
+		<h4>Please select Consumer (Patient) or Provider</h4>
 		<hr>
-		<form action="/data" method="get" onsubmit="return submitAction()">
+		<form id="myForm" action="/data" method="get"
+			onsubmit="return submitAction()">
 			<input type="radio" id="consumer" name="type" value="consumer">
 			<label for="consumer">Consumer (Patient)</label><br> <input
 				type="radio" id="provider" name="type" value="provider"> <label
 				for="provider">Provider</label><br> <label for="authCode">Authorization
-				Code: </label><br> <input type="text" id="authCode" name="authCode">
+				Code: </label><input type="text" id="authCode" name="authCode">
 			<button type="submit" autofocus>Fetch</button>
 		</form>
+		<br><br>
 	</div>
+	<h2>Response from Cigna Sandbox System</h2>
+	<div id="responseHeader"></div>
+	<div id="responseBody"></div>
 	<script>
-		function submitAction(data) {
-			alert("hello: " + data);
+		function submitAction() {
+			$("#responseHeader").html("Processing...");
+			$("#responseBody").html("");
+			var url = event.currentTarget.action;
+			var payload = $("#myForm").serialize();
+			console.log("URL: " + url);
+			console.log("Payload: " + payload);
+			$.ajax({
+				url : url,
+				type : 'post',
+				dataType : 'application/x-www-form-urlencoded',
+				data : payload,
+				success : function(data, status, xhr) {
+					$("#responseHeader").html(status + " " + xhr);
+					$("#responseBody").html(data);
+				},
+				error : function(jqXhr, textStatus, errorMessage) {
+					$("#responseHeader").html(jqXhr.status + " " + jqXhr.statusText);
+					$("#responseBody").html(jqXhr.responseText);
+				},
+			});
+			return false;
 		}
 	</script>
 </body>

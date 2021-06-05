@@ -22,7 +22,7 @@ public class TokenFetchServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		TokenUtility tokenUtility = new TokenUtility();
-		TokenResponse tokenResponse = tokenUtility.fetchAccessToken(request.getParameter("code"));
+		TokenResponse tokenResponse = tokenUtility.fetchAccessToken(request.getParameter("code"), response);
 		String tokenResponseString = new Gson().toJson(tokenResponse);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

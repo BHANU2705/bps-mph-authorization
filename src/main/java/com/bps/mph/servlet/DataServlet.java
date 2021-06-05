@@ -29,31 +29,38 @@ public class DataServlet extends HttpServlet {
 		String type = request.getParameter("type");
 		String authCode = request.getParameter("authCode");
 		TokenUtility tokenUtility = new TokenUtility();
-		TokenResponse tokenResponse = tokenUtility.fetchAccessToken(authCode);
-		String url = null;
-		if ("consumer".equals(type)) {
-			url = Util.CONSUMER_SANDBOX_ENDPOINT + "/Patient/" + tokenResponse.getPatient();
-		} else if ("provider".equals(type)) {
-			url = Util.PROVIDER_SANDBOX_ENDPOINT + "/HealthcareService/BurrClinicServices";
-		}
-		
-		try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-			HttpGet httpGet = new HttpGet(url);
-			httpGet.setHeader("Authorization", "Bearer " + tokenResponse.getAccess_token());
-			try (CloseableHttpResponse httpResponse = client.execute(httpGet)) {
-				if (Util.isSuccess(httpResponse.getStatusLine().getStatusCode())) {
-					String str = EntityUtils.toString(httpResponse.getEntity());
-					System.out.println("Bhanu got response: " + str);
-					response.setContentType("application/json");
-					response.setCharacterEncoding("UTF-8");
-					response.setStatus(HttpStatus.SC_OK);
-					PrintWriter out = response.getWriter();
-					out.print(str);
-					out.flush();
-				} else {
-					response.sendError(httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine().getReasonPhrase());
+		TokenResponse tokenResponse = tokenUtility.fetchAccessToken(authCode, response);
+		if (tokenResponse != null) {
+			String url = null;
+			if ("consumer".equals(type)) {
+				url = Util.CONSUMER_SANDBOX_ENDPOINT + "/Patient/" + tokenResponse.getPatient();
+			} else if ("provider".equals(type)) {
+				url = Util.PROVIDER_SANDBOX_ENDPOINT + "/HealthcareService/BurrClinicServices";
+			}
+
+			try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+				HttpGet httpGet = new HttpGet(url);
+				httpGet.setHeader("Authorization", "Bearer " + tokenResponse.getAccess_token());
+				try (CloseableHttpResponse httpResponse = client.execute(httpGet)) {
+					if (Util.isSuccess(httpResponse.getStatusLine().getStatusCode())) {
+						String str = EntityUtils.toString(httpResponse.getEntity());
+						System.out.println("Bhanu got response: " + str);
+						response.setContentType("application/json");
+						response.setCharacterEncoding("UTF-8");
+						response.setStatus(HttpStatus.SC_OK);
+						PrintWriter out = response.getWriter();
+						out.print(str);
+						out.flush();
+					} else {
+						response.sendError(httpResponse.getStatusLine().getStatusCode(),
+								httpResponse.getStatusLine().getReasonPhrase());
+					}
 				}
 			}
 		}
+	}
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doGet(req, resp);
 	}
 }
